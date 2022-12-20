@@ -1,0 +1,218 @@
+\documentclass[12pt]{article}
+
+\usepackage{fullpage}
+\usepackage[T1]{fontenc}
+\usepackage{mathptmx}
+
+\title{\textbf{\underline{Assignment 7 Design Document}}}
+\author{Devasha Trivedi}
+\date{\today}
+
+\begin{document}\maketitle
+This assignment has us implement a program that identifies the most likely authors of a given text using stylometry.
+
+\section{Files to Submit}\label{ss:deliverables}
+\begin{enumerate}
+    \item bf.h: This header file was provided to us and contains the interface for the Bloom ADT.
+    \item bf.c: This file contains my implementation of the Bloom filter ADT.
+    \item bv.h: This header file was provided to us and contains the interface for the bit vector ADT.
+    \item bv.c: This file contains my implementation of the bit vector ADT.
+    \item ht.h: This header file was provided to us and contains the interface for the hash table ADT.
+    \item ht.c: This file contains my implementation of the hash table ADT.
+    \item identify.c: This file contains my implementation fo the author identificaiton program.
+    \item metric.h: This header file was provided to us and contains definitions for distance metrics.
+    \item node.h: This header file was provided to us and contains the interface for the node ADT.
+    \item node.c: This file contains my implementation of the node ADT.
+    \item parser.h: This header file was provided to us and contains the interface for the parsing module.
+    \item parser.c: This file contains the parsing module implementation.
+    \item pq.h: This header file was provided to us and contains the interface for the priority queue ADT.
+    \item pq.c: This file contains my implementation of the priority queue ADT.
+    \item salts.h: This header file was provided to us and contains the definitions for the salts to be used in bf.c, as well as in ht.c
+    \item speck.h: This header file was provided to us and contains the interface for the SPECK cipher.
+    \item speck.c: This file contains the SPECK cipher implementation.
+    \item text.h: This header file was provided to us and contains the interface for the text ADT.
+    \item text.c: This file contains my implementation of the text ADT.
+    \item Makefile: This file helps compile and run my program.
+    \item README.md: This file contains a summary of the program, as well as how to interact with the Makefile.
+    \item DESIGN.pdf: This file contains the pseudocode of my implementations.
+    \item WRITEUP.pdf: This file discusses my program's behavior. It also serves as a reflection of how I coded the program and how it works.
+\end{enumerate}
+
+\section{Pseudocode}\label{ss:pseudocode}
+\subsection{\textbf{bf.c}}
+\begin{verbatim}
+bf_create
+    use salts to initialize bf
+bf_delete 
+    bv_delete(bf)
+    free(bf)
+bf_size
+    bv_length
+bf_insert
+    set bits for:
+    primary
+    secondary
+    tertiary
+\end{verbatim}
+
+\subsection{\textbf{bv.c}}
+\begin{verbatim}
+bv_create
+    set vector
+    set length
+    for i <= length:
+      clr_bit()
+bv_delete
+    free(bv)
+bv_length
+    return length(bv)
+refer to code comments for:
+set_bit
+clr_bit
+get_bit
+\end{verbatim}
+
+\subsection{\textbf{ht.c}}
+\begin{verbatim}
+use salts to initialize
+
+ht_delete
+node_delete
+free(ht)
+
+ht_size
+return length(ht)
+
+ht_lookup
+while node != NULL:
+  index++
+  index %= ht_size
+  node = ht_slots
+return node
+
+ht_insert
+same while loop from ht_lookup
+if node = NULL
+  node = node_create(word)
+  node_count++
+  ht_slots = node
+return node
+
+
+HTI:
+
+table = ht
+slot = 0
+
+hti_delete
+free(hti)
+
+ht_iter
+node = table->slots[slot]
+slot++
+return node
+\end{verbatim}
+
+\subsection{\textbf{node.c}}
+\begin{verbatim}
+create a node
+    -use malloc
+    -set word
+   -set a counter variable
+delete a node
+    -use free
+    -set node to NULL
+\end{verbatim}
+
+\subsection{\textbf{pq.c}}
+\begin{verbatim}
+create pq
+    -set capacity
+    -set counter variable
+    -set nodes
+delete pq
+    -use free
+    -set everything to NULL
+is pq empty
+    empty = true
+    if size(pq) > 0:
+        empty = false
+    return empty
+is pq full
+    empty = true
+    if size(pq) < pq(capacity):
+        empty = false
+    return empty
+enqueue
+    build heap from asgn3
+    heap goes up
+dequeue
+    build heap from asgn3
+    heap goes down
+\end{verbatim}
+
+\subsection{\textbf{text.c}}
+\begin{verbatim}
+int ht_size, bf_size
+
+create text->ht and text->bf
+word_count = 0
+
+use a while loop and a bool
+    -insert ht and bf
+    -return text
+
+delete text
+    ht_delete
+    bf_delete
+
+total_count
+    use hti and for loop
+    for i < ht_size:
+      Node *n = ht_iter(hti);
+      if n != NULL:
+        total_count += n->count;
+    return total_count;
+
+text_distance
+    calculate all metrics
+    if statements to set them
+
+text_frequency
+    if text has a word:
+      Node *slot = ht_lookup
+        if slot != NULL
+          freq = slot_size
+    return freq
+\end{verbatim}
+
+\subsection{\textbf{identify.c}}
+\begin{verbatim}
+main() is gonna have getopt() loop
+getopt() loop has command-line parsing
+
+create a noise text & anonymous text
+create a pq
+
+for i < author_count:
+    get data required
+
+    if author = NULL:
+        print(File cant be opened)
+    else:
+        enqueue author and distance
+
+    print matches, metric names
+    dequeue author and distance 
+\end{verbatim}
+
+\section(Credit)\label(ss:credit)
+\begin{itemize}
+    \item I referred to the bv8.h file in the code comments repo for the set, clr, and get bit functions in bv.c
+    \item I went to Eugene's section to understand the assignment and some pseudocode.
+    \item I referred to various chapters from the textbook to refresh my memory/assist my coding.
+    \item I took node.c and pq.c from my asgn6 code.
+    \item I used the heapsort logic from asgn3 for pq.c
+\end{itemize}
+
+\end{document}
